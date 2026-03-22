@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ThreatSphere — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#010810;--bg2:#040d1a;--bg3:#071222;--bg4:#0a1830;--b0:#0f2035;--b1:#1a3050;--t0:#e2eefa;--t1:#8aabcc;--t2:#4a6a8a;--t3:#243a52;--cyan:#00c8f0;--purple:#8b5cf6;--crit:#f03060;--low:#20d080;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;-webkit-font-smoothing:antialiased;}
+body{background:var(--bg);color:var(--t0);font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow-x:hidden;}
+.bg-grid{position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(0,200,240,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,240,.02) 1px,transparent 1px);background-size:44px 44px;}
+.bg-glow{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(0,200,240,.05) 0%,transparent 70%);}
+.wrap{width:100%;max-width:460px;padding:20px;position:relative;z-index:1;}
+.logo{text-align:center;margin-bottom:28px;}
+.logo-icon{font-size:52px;display:block;margin-bottom:10px;filter:drop-shadow(0 0 24px rgba(0,200,240,.5));animation:float 4s ease-in-out infinite;}
+.logo-name{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;letter-spacing:2px;}
+.logo-name span{color:var(--cyan);}
+.logo-sub{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--t2);text-transform:uppercase;margin-top:3px;}
+.card{background:var(--bg2);border:1px solid var(--b1);border-radius:16px;padding:28px 30px;position:relative;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.6);}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple),var(--crit));}
+.tabs{display:flex;gap:4px;background:var(--bg3);border-radius:10px;padding:4px;margin-bottom:24px;}
+.tab{flex:1;padding:9px;text-align:center;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:7px;cursor:pointer;color:var(--t2);transition:all .2s;user-select:none;}
+.tab.active{background:var(--b1);color:var(--t0);}
+.tab:hover:not(.active){color:var(--t1);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.fg{margin-bottom:16px;}
+.fl{display:block;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t2);margin-bottom:6px;}
+.fi{width:100%;background:var(--bg3);border:1px solid var(--b1);border-radius:9px;padding:11px 14px;color:var(--t0);font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;transition:all .2s;}
+.fi:focus{border-color:rgba(0,200,240,.45);box-shadow:0 0 0 3px rgba(0,200,240,.08);background:var(--bg4);}
+.fi::placeholder{color:var(--t3);}
+select.fi{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a6a8a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+select.fi option{background:var(--bg2);color:var(--t0);}
+.fh{font-size:10px;color:var(--t2);margin-top:4px;}
+.btn{width:100%;padding:12px;background:linear-gradient(135deg,#004d8f,#0080b8);border:1px solid rgba(0,200,240,.3);border-radius:10px;color:#fff;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;}
+.btn:hover:not(:disabled){background:linear-gradient(135deg,#0066b8,#00a0d8);box-shadow:0 0 24px rgba(0,200,240,.28);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0;}
+.msg{padding:10px 14px;border-radius:8px;font-size:12px;margin-top:12px;display:none;line-height:1.5;}
+.msg.err{background:rgba(240,48,96,.1);border:1px solid rgba(240,48,96,.35);color:var(--crit);}
+.msg.ok{background:rgba(32,208,128,.1);border:1px solid rgba(32,208,128,.35);color:var(--low);}
+.msg.show{display:block;}
+.sec-info{display:flex;align-items:flex-start;gap:9px;margin-top:18px;padding:10px 13px;background:var(--bg3);border:1px solid var(--b0);border-radius:9px;}
+.sec-text{font-size:10px;color:var(--t2);line-height:1.6;}
+.sec-text strong{color:var(--t1);}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow"></div>
+<div class="wrap">
+  <div class="logo">
+    <span class="logo-icon">🔮</span>
+    <div class="logo-name">THREAT<span>INTEL</span></div>
+    <div class="logo-sub">SOC Intelligence Platform</div>
+  </div>
+  <div class="card">
+    <div class="tabs">
+      <div class="tab active" id="tab-login">Sign In</div>
+      <div class="tab" id="tab-reg">Register</div>
+    </div>
+    <!-- LOGIN -->
+    <div id="login-form">
+      <div class="fg"><label class="fl" for="lu">Username</label><input class="fi" id="lu" type="text" placeholder="your_username" autocomplete="username" autocapitalize="none" autocorrect="off"/></div>
+      <div class="fg"><label class="fl" for="lp">Password</label><input class="fi" id="lp" type="password" placeholder="••••••••••" autocomplete="current-password"/></div>
+      <button class="btn" id="login-btn">Sign In</button>
+      <div class="msg" id="login-msg"></div>
+    </div>
+    <!-- REGISTER -->
+    <div id="reg-form" style="display:none">
+      <div class="form-row">
+        <div class="fg"><label class="fl" for="ru">Username</label><input class="fi" id="ru" type="text" placeholder="choose_username" autocapitalize="none" autocorrect="off"/><div class="fh">3–30 chars, letters/numbers/_</div></div>
+        <div class="fg"><label class="fl" for="rn">Display Name</label><input class="fi" id="rn" type="text" placeholder="John Smith"/><div class="fh">Shown in the app sidebar</div></div>
+      </div>
+      <div class="fg">
+        <label class="fl" for="rr">Your Role</label>
+        <select class="fi" id="rr">
+          <option value="">— Select your role —</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label class="fl" for="rp">Password</label><input class="fi" id="rp" type="password" placeholder="min 8 characters" autocomplete="new-password"/><div class="fh">Min 8 chars, include a number</div></div>
+        <div class="fg"><label class="fl" for="rp2">Confirm</label><input class="fi" id="rp2" type="password" placeholder="repeat password" autocomplete="new-password"/></div>
+      </div>
+      <button class="btn" id="reg-btn">Create Account</button>
+      <div class="msg" id="reg-msg"></div>
+    </div>
+    <div class="sec-info">
+      <span style="font-size:15px;flex-shrink:0;margin-top:1px">🔒</span>
+      <div class="sec-text">Passwords stored with <strong>scrypt</strong> (memory-hard). <strong>5 failed attempts → 15-minute lockout</strong>.</div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+'use strict';
+var roles=[];
+fetch('/api/auth/roles').then(function(r){return r.json();}).then(function(list){
+  roles=list||[];
+  var sel=document.getElementById('rr');
+  list.forEach(function(r){var o=document.createElement('option');o.value=r;o.textContent=r;sel.appendChild(o);});
+}).catch(function(){});
+fetch('/api/auth/me',{credentials:'include'}).then(function(r){if(r.ok)location.href='/app';}).catch(function(){});
+function $id(id){return document.getElementById(id);}
+function showMsg(id,txt,type){var e=$id(id);e.textContent=txt;e.className='msg '+(type==='error'?'err':'ok')+' show';}
+function clearMsg(id){var e=$id(id);e.textContent='';e.className='msg';}
+function setLoading(id,on,label){var b=$id(id);if(on){b.disabled=true;b.innerHTML='<span class="spinner"></span>Working...';}else{b.disabled=false;b.textContent=label;}}
+function showTab(t){
+  var isL=(t==='login');
+  $id('tab-login').classList.toggle('active',isL);
+  $id('tab-reg').classList.toggle('active',!isL);
+  $id('login-form').style.display=isL?'':'none';
+  $id('reg-form').style.display=isL?'none':'';
+  clearMsg('login-msg');clearMsg('reg-msg');
+}
+$id('tab-login').addEventListener('click',function(){showTab('login');});
+$id('tab-reg').addEventListener('click',function(){showTab('reg');});
+function doLogin(){
+  var u=$id('lu').value.trim(),p=$id('lp').value;
+  if(!u||!p){showMsg('login-msg','Please fill in both fields.','error');return;}
+  setLoading('login-btn',true,'Sign In');clearMsg('login-msg');
+  fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({username:u,password:p})})
+  .then(function(r){return r.json().then(function(d){return{ok:r.ok,data:d};});})
+  .then(function(res){
+    if(!res.ok){setLoading('login-btn',false,'Sign In');showMsg('login-msg',res.data.error||'Login failed.','error');return;}
+    sessionStorage.setItem('user',JSON.stringify(res.data.user||{}));
+    location.href='/app';
+  }).catch(function(){setLoading('login-btn',false,'Sign In');showMsg('login-msg','Connection error — is the server running?','error');});
+}
+function doRegister(){
+  var u=$id('ru').value.trim(),nick=$id('rn').value.trim(),role=$id('rr').value,p=$id('rp').value,p2=$id('rp2').value;
+  if(!u||!p||!p2){showMsg('reg-msg','Please fill in all required fields.','error');return;}
+  if(!role){showMsg('reg-msg','Please select your role.','error');return;}
+  if(p!==p2){showMsg('reg-msg','Passwords do not match.','error');return;}
+  setLoading('reg-btn',true,'Create Account');clearMsg('reg-msg');
+  fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({username:u,password:p,nickname:nick||u,role:role})})
+  .then(function(r){return r.json().then(function(d){return{ok:r.ok,data:d};});})
+  .then(function(res){
+    if(!res.ok){setLoading('reg-btn',false,'Create Account');showMsg('reg-msg',res.data.error||'Registration failed.','error');return;}
+    sessionStorage.setItem('user',JSON.stringify(res.data.user||{}));
+    showMsg('reg-msg','Account created! Redirecting...','success');
+    setTimeout(function(){location.href='/app';},700);
+  }).catch(function(){setLoading('reg-btn',false,'Create Account');showMsg('reg-msg','Connection error.','error');});
+}
+$id('login-btn').addEventListener('click',doLogin);
+$id('reg-btn').addEventListener('click',doRegister);
+['lu','lp'].forEach(function(id){$id(id).addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});});
+['ru','rn','rp','rp2'].forEach(function(id){$id(id).addEventListener('keydown',function(e){if(e.key==='Enter')doRegister();});});
+}());
+</script>
+</body>
+</html>

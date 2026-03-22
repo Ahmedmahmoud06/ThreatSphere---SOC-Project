@@ -1,0 +1,776 @@
+{
+  "users": {
+    "ahmedmahmoud": {
+      "id": "e4a1c9b4a9eb2a073267604cb49e0cde",
+      "username": "ahmedmahmoud",
+      "password": "scrypt$649f808483894972eb9a2879a13ce527c7c891306bb9ebec7fd54e020474a2eb$265c57525751e45aaaea4ae538050305e2fe4a084e0f363c6e225f4ffbdec53818b27716eb3fcee968da07e15cab9de477ab05dedefd942b24197d4b1761087b",
+      "nickname": "ahmedmahmoud",
+      "role": "SOC Analyst Tier 1",
+      "createdAt": "2026-03-19T11:34:03.107Z"
+    },
+    "ahmedmahmoud99": {
+      "id": "1c8cea1cd2b355b059f92f13172c62f5",
+      "username": "ahmedmahmoud99",
+      "password": "scrypt$f3dac9dcb54a348a113c6ef2a25fa8440d2e837ea648152f2ca2cc2609cb8005$a729c29d8e07f7d3c3535a28a64ab2c13a76323d5469aa8291b1b8dfc9699133204dafef4e7c740f7a8d7dd93cffa4f75b754271c5b9256e6083f1642b7deece",
+      "nickname": "Gohary",
+      "role": "SOC Analyst Tier 1",
+      "createdAt": "2026-03-19T16:23:50.468Z"
+    }
+  },
+  "investigations": {
+    "e4a1c9b4a9eb2a073267604cb49e0cde": {
+      "b1d161e98d26add20dd53dcc84e0e2b6": {
+        "id": "b1d161e98d26add20dd53dcc84e0e2b6",
+        "userId": "e4a1c9b4a9eb2a073267604cb49e0cde",
+        "ioc": "45.20.23.56",
+        "iocType": "ip",
+        "results": {
+          "virustotal": {
+            "source": "VirusTotal",
+            "icon": "🛡️",
+            "_demo": true,
+            "verdict": "suspicious",
+            "stats": {
+              "malicious": 3,
+              "suspicious": 2,
+              "harmless": 47,
+              "undetected": 20
+            },
+            "engines": 72,
+            "detections": 3,
+            "reputation": -12,
+            "firstSeen": "2024-08-22",
+            "lastSeen": "2026-03-19",
+            "lastAnalysis": "2026-03-19 11:34 UTC",
+            "categories": [
+              "suspicious"
+            ],
+            "tags": [],
+            "_apiError": "VT_KEY not configured"
+          },
+          "abuseipdb": {
+            "source": "AbuseIPDB",
+            "icon": "⚠️",
+            "_demo": true,
+            "verdict": "clean",
+            "abuseScore": 15,
+            "totalReports": 23,
+            "distinctUsers": 8,
+            "lastReported": "2026-02-24",
+            "isp": "AS16276 OVH",
+            "usageType": "Data Center/Web Hosting",
+            "country": "US",
+            "countryName": "United States",
+            "isWhitelisted": false,
+            "domain": "hosting-provider.net",
+            "ipVersion": 4,
+            "categories": [],
+            "_apiError": "ABUSE_KEY not configured"
+          },
+          "hybrid": {
+            "source": "Hybrid Analysis",
+            "icon": "🔬",
+            "_demo": true,
+            "verdict": "malicious",
+            "detected": true,
+            "threatScore": 81,
+            "malwareFamily": "QakBot",
+            "behavior": [
+              "Drops executable to %TEMP%",
+              "Creates scheduled task for persistence",
+              "Modifies Windows registry Run key",
+              "Communicates with C2 via HTTPS"
+            ],
+            "networkIndicators": 13,
+            "droppedFiles": 4,
+            "registryChanges": 9,
+            "sandboxEnv": "Windows 10 x64 (22H2)",
+            "analysisTime": "63 seconds",
+            "_apiError": "HYBRID_KEY not configured — get free key at hybrid-analysis.com/apikeys"
+          },
+          "shodan": {
+            "source": "Shodan",
+            "icon": "🌐",
+            "_demo": true,
+            "verdict": "info",
+            "ports": [
+              22,
+              80,
+              443
+            ],
+            "org": "AS16509 Amazon AWS",
+            "country": "United States",
+            "city": "San Francisco",
+            "os": null,
+            "vulns": [],
+            "banners": [
+              "nginx/1.24.0",
+              "OpenSSH_8.9p1"
+            ],
+            "lastUpdate": "2026-03-11",
+            "hostnames": [],
+            "tags": [],
+            "isp": "—",
+            "_apiError": "SHODAN_KEY not configured"
+          },
+          "whois": {
+            "source": "WHOIS",
+            "icon": "📋",
+            "verdict": "info",
+            "registrar": "AT&T Enterprises, LLC",
+            "organization": "AT&T Enterprises, LLC",
+            "createdDate": "—",
+            "updatedDate": "—",
+            "expiryDate": "N/A",
+            "nameservers": [],
+            "registrant": "AT&T Enterprises, LLC",
+            "country": "US",
+            "countryName": "United States",
+            "region": "Georgia",
+            "city": "Lithonia",
+            "asn": "AS7018",
+            "timezone": "America/New_York",
+            "status": [],
+            "dnssec": "N/A",
+            "daysOld": -1,
+            "newDomain": false,
+            "emails": []
+          }
+        },
+        "aiAnalysis": {
+          "executiveSummary": "Suspicious characteristics detected across multiple intelligence sources. Elevated monitoring warranted. Verify before blocking.",
+          "riskScore": 50,
+          "verdict": "suspicious",
+          "threatActor": null,
+          "malwareFamily": "QakBot",
+          "attackTechniques": [],
+          "iocContext": "45.20.23.56 (ip) cross-referenced across VirusTotal, AbuseIPDB, Shodan, and WHOIS. Intelligence confidence: MEDIUM.",
+          "recommendations": [
+            "Monitor 45.20.23.56 at perimeter firewall and web proxy",
+            "Search SIEM for connections to this IOC in the past 90 days",
+            "No immediate containment required",
+            "Add to EDR detection rules and threat intelligence watchlist",
+            "Re-evaluate when new intelligence becomes available"
+          ],
+          "iocRelationships": [],
+          "confidence": "medium",
+          "tlp": "GREEN",
+          "tags": [
+            "suspicious",
+            "ip"
+          ],
+          "priorityAction": "Monitor 45.20.23.56 for 48 hours before escalating"
+        },
+        "comments": [
+          {
+            "id": "8034288ea44ceb47",
+            "text": "[Confirmed Malicious]\n[Suspicious]\n[False Positive]\n[Under Investigation]\n[Ticket Created]\n[False Alert]",
+            "createdAt": "2026-03-19T11:34:59.469Z"
+          }
+        ],
+        "createdAt": "2026-03-19T11:34:37.717Z",
+        "updatedAt": "2026-03-19T11:34:59.469Z"
+      },
+      "643f4e6412ca65c48fa2e51f5abbcbdb": {
+        "id": "643f4e6412ca65c48fa2e51f5abbcbdb",
+        "userId": "e4a1c9b4a9eb2a073267604cb49e0cde",
+        "ioc": "eeeeeeeeeeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "iocType": "sha256",
+        "results": {
+          "virustotal": {
+            "source": "VirusTotal",
+            "icon": "🛡️",
+            "_demo": true,
+            "verdict": "malicious",
+            "stats": {
+              "malicious": 5,
+              "suspicious": 3,
+              "harmless": 54,
+              "undetected": 10
+            },
+            "engines": 72,
+            "detections": 5,
+            "reputation": -20,
+            "firstSeen": "2024-08-22",
+            "lastSeen": "2026-03-19",
+            "lastAnalysis": "2026-03-19 11:35 UTC",
+            "categories": [
+              "malware"
+            ],
+            "tags": [
+              "c2-server"
+            ],
+            "_apiError": "VT_KEY not configured"
+          },
+          "abuseipdb": {
+            "source": "AbuseIPDB",
+            "icon": "⚠️",
+            "notApplicable": true,
+            "message": "AbuseIPDB only supports IP lookups."
+          },
+          "hybrid": {
+            "source": "Hybrid Analysis",
+            "icon": "🔬",
+            "_demo": true,
+            "verdict": "clean",
+            "detected": false,
+            "threatScore": 1,
+            "malwareFamily": null,
+            "behavior": [],
+            "networkIndicators": 0,
+            "droppedFiles": 0,
+            "registryChanges": 0,
+            "sandboxEnv": "Windows 10 x64 (22H2)",
+            "analysisTime": "30 seconds",
+            "_apiError": "HYBRID_KEY not configured — get free key at hybrid-analysis.com/apikeys"
+          },
+          "shodan": {
+            "source": "Shodan",
+            "icon": "🌐",
+            "notApplicable": true,
+            "message": "Shodan requires IP or domain."
+          },
+          "whois": {
+            "source": "WHOIS",
+            "icon": "📋",
+            "verdict": "info",
+            "notApplicable": true,
+            "message": "WHOIS is not applicable to file hashes."
+          }
+        },
+        "aiAnalysis": {
+          "executiveSummary": "Suspicious characteristics detected across multiple intelligence sources. Elevated monitoring warranted. Verify before blocking.",
+          "riskScore": 50,
+          "verdict": "suspicious",
+          "threatActor": null,
+          "malwareFamily": null,
+          "attackTechniques": [],
+          "iocContext": "eeeeeeeeeeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa (sha256) cross-referenced across VirusTotal, AbuseIPDB, Shodan, and WHOIS. Intelligence confidence: MEDIUM.",
+          "recommendations": [
+            "Monitor eeeeeeeeeeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa at perimeter firewall and web proxy",
+            "Search SIEM for connections to this IOC in the past 90 days",
+            "No immediate containment required",
+            "Add to EDR detection rules and threat intelligence watchlist",
+            "Re-evaluate when new intelligence becomes available"
+          ],
+          "iocRelationships": [],
+          "confidence": "medium",
+          "tlp": "GREEN",
+          "tags": [
+            "suspicious",
+            "sha256"
+          ],
+          "priorityAction": "Monitor eeeeeeeeeeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa for 48 hours before escalating"
+        },
+        "comments": [],
+        "createdAt": "2026-03-19T11:35:56.763Z",
+        "updatedAt": "2026-03-19T11:35:56.763Z"
+      },
+      "b2e26c7252f63fb5c4ea50aa6698ea3f": {
+        "id": "b2e26c7252f63fb5c4ea50aa6698ea3f",
+        "userId": "e4a1c9b4a9eb2a073267604cb49e0cde",
+        "ioc": "6666666666333333333333333333333333333333333333333333333333333333",
+        "iocType": "sha256",
+        "results": {
+          "virustotal": {
+            "source": "VirusTotal",
+            "icon": "🛡️",
+            "_demo": true,
+            "verdict": "clean",
+            "stats": {
+              "malicious": 1,
+              "suspicious": 1,
+              "harmless": 43,
+              "undetected": 27
+            },
+            "engines": 72,
+            "detections": 1,
+            "reputation": -4,
+            "firstSeen": "2024-08-22",
+            "lastSeen": "2026-03-19",
+            "lastAnalysis": "2026-03-19 11:36 UTC",
+            "categories": [
+              "harmless"
+            ],
+            "tags": [],
+            "_apiError": "VT_KEY not configured"
+          },
+          "abuseipdb": {
+            "source": "AbuseIPDB",
+            "icon": "⚠️",
+            "notApplicable": true,
+            "message": "AbuseIPDB only supports IP lookups."
+          },
+          "hybrid": {
+            "source": "Hybrid Analysis",
+            "icon": "🔬",
+            "_demo": true,
+            "verdict": "clean",
+            "detected": false,
+            "threatScore": 3,
+            "malwareFamily": null,
+            "behavior": [],
+            "networkIndicators": 0,
+            "droppedFiles": 0,
+            "registryChanges": 0,
+            "sandboxEnv": "Windows 10 x64 (22H2)",
+            "analysisTime": "52 seconds",
+            "_apiError": "HYBRID_KEY not configured — get free key at hybrid-analysis.com/apikeys"
+          },
+          "shodan": {
+            "source": "Shodan",
+            "icon": "🌐",
+            "notApplicable": true,
+            "message": "Shodan requires IP or domain."
+          },
+          "whois": {
+            "source": "WHOIS",
+            "icon": "📋",
+            "verdict": "info",
+            "notApplicable": true,
+            "message": "WHOIS is not applicable to file hashes."
+          }
+        },
+        "aiAnalysis": {
+          "executiveSummary": "Minimal threat indicators detected. Low risk profile based on current intelligence data.",
+          "riskScore": 10,
+          "verdict": "clean",
+          "threatActor": null,
+          "malwareFamily": null,
+          "attackTechniques": [],
+          "iocContext": "6666666666333333333333333333333333333333333333333333333333333333 (sha256) cross-referenced across VirusTotal, AbuseIPDB, Shodan, and WHOIS. Intelligence confidence: LOW.",
+          "recommendations": [
+            "Monitor 6666666666333333333333333333333333333333333333333333333333333333 at perimeter firewall and web proxy",
+            "Search SIEM for connections to this IOC in the past 90 days",
+            "No immediate containment required",
+            "Add to EDR detection rules and threat intelligence watchlist",
+            "Re-evaluate when new intelligence becomes available"
+          ],
+          "iocRelationships": [],
+          "confidence": "low",
+          "tlp": "GREEN",
+          "tags": [
+            "clean",
+            "sha256"
+          ],
+          "priorityAction": "Monitor 6666666666333333333333333333333333333333333333333333333333333333 for 48 hours before escalating"
+        },
+        "comments": [],
+        "createdAt": "2026-03-19T11:36:29.409Z",
+        "updatedAt": "2026-03-19T11:36:29.409Z"
+      },
+      "8a5624443920fa66536d484fbfa83d60": {
+        "id": "8a5624443920fa66536d484fbfa83d60",
+        "userId": "e4a1c9b4a9eb2a073267604cb49e0cde",
+        "ioc": "dddddddddd333333333333333333334444444444444444444444444444444444",
+        "iocType": "sha256",
+        "results": {
+          "abuseipdb": {
+            "source": "AbuseIPDB",
+            "icon": "⚠️",
+            "notApplicable": true,
+            "message": "AbuseIPDB only supports IP lookups."
+          },
+          "shodan": {
+            "source": "Shodan",
+            "icon": "🌐",
+            "notApplicable": true,
+            "message": "Shodan requires IP or domain."
+          },
+          "whois": {
+            "source": "WHOIS",
+            "icon": "📋",
+            "verdict": "info",
+            "notApplicable": true,
+            "message": "WHOIS is not applicable to file hashes."
+          },
+          "hybrid": {
+            "source": "Hybrid Analysis",
+            "icon": "🔬",
+            "verdict": "unknown",
+            "found": false,
+            "message": "No sandbox reports found for this IOC.",
+            "hint": "Submit the sample at hybrid-analysis.com to create a new analysis."
+          },
+          "virustotal": {
+            "source": "VirusTotal",
+            "icon": "🛡️",
+            "_demo": true,
+            "verdict": "malicious",
+            "stats": {
+              "malicious": 5,
+              "suspicious": 3,
+              "harmless": 53,
+              "undetected": 11
+            },
+            "engines": 72,
+            "detections": 5,
+            "reputation": -20,
+            "firstSeen": "2024-08-22",
+            "lastSeen": "2026-03-19",
+            "lastAnalysis": "2026-03-19 11:49 UTC",
+            "categories": [
+              "malware"
+            ],
+            "tags": [
+              "c2-server"
+            ],
+            "_apiError": "VT 404: File \"dddddddddd333333333333333333334444444444444444444444444444444444\" not found"
+          }
+        },
+        "aiAnalysis": {
+          "executiveSummary": "The provided IOC is a SHA256 hash with a mixed verdict from VirusTotal, indicating potential malicious activity, but Hybrid Analysis reports no malicious behavior. The IOC has limited context and intelligence, making it challenging to determine its severity. Further analysis is required to confirm its impact.",
+          "riskScore": 20,
+          "verdict": "malicious",
+          "threatActor": null,
+          "malwareFamily": null,
+          "attackTechniques": [],
+          "iocContext": "The IOC is associated with 5 out of 72 detections on VirusTotal, suggesting potential malicious intent, but lacks concrete evidence from other sources. The Hybrid Analysis score of 0/100 and no malicious reports indicate a low likelihood of malware. The IOC's creation date is unknown, adding to the uncertainty.",
+          "recommendations": [
+            "Monitor network traffic for suspicious activity",
+            "Run a full system scan using anti-virus software",
+            "Check for any related IOCs",
+            "Block the IOC at the network perimeter",
+            "Perform a thorough incident response"
+          ],
+          "iocRelationships": [],
+          "confidence": "low",
+          "tlp": "GREEN",
+          "tags": [],
+          "priorityAction": "Block the IOC at the network perimeter to prevent potential malicious activity."
+        },
+        "comments": [],
+        "createdAt": "2026-03-19T11:49:28.285Z",
+        "updatedAt": "2026-03-19T11:49:28.285Z"
+      },
+      "59e3110e8fb79923150270c8c97a32b5": {
+        "id": "59e3110e8fb79923150270c8c97a32b5",
+        "userId": "e4a1c9b4a9eb2a073267604cb49e0cde",
+        "ioc": "cd903ad2211cf7d166646d75e57fb866000f4a3b870b5ec759929be2fd81d334",
+        "iocType": "sha256",
+        "results": {
+          "abuseipdb": {
+            "source": "AbuseIPDB",
+            "icon": "⚠️",
+            "notApplicable": true,
+            "message": "AbuseIPDB only supports IP lookups."
+          },
+          "shodan": {
+            "source": "Shodan",
+            "icon": "🌐",
+            "notApplicable": true,
+            "message": "Shodan requires IP or domain."
+          },
+          "whois": {
+            "source": "WHOIS",
+            "icon": "📋",
+            "verdict": "info",
+            "notApplicable": true,
+            "message": "WHOIS is not applicable to file hashes."
+          },
+          "hybrid": {
+            "source": "Hybrid Analysis",
+            "icon": "🔬",
+            "verdict": "unknown",
+            "found": false,
+            "message": "No sandbox reports found for this IOC.",
+            "hint": "Submit the sample at hybrid-analysis.com to create a new analysis."
+          },
+          "virustotal": {
+            "source": "VirusTotal",
+            "icon": "🛡️",
+            "verdict": "malicious",
+            "stats": {
+              "malicious": 59,
+              "suspicious": 0,
+              "harmless": 0,
+              "undetected": 13
+            },
+            "engines": 72,
+            "detections": 59,
+            "reputation": -12,
+            "firstSeen": "2024-05-17",
+            "lastSeen": "2026-03-17",
+            "lastAnalysis": "3/17/2026, 4:25:24 AM UTC",
+            "timesSubmitted": 549,
+            "categories": [],
+            "tags": [
+              "obfuscated",
+              "peexe",
+              "assembly",
+              "long-sleeps",
+              "detect-debug-environment",
+              "idle"
+            ],
+            "popularThreatLabel": "trojan.asyncrat/msil",
+            "popularThreatCategory": [
+              "trojan"
+            ],
+            "popularThreatName": [
+              "asyncrat",
+              "msil",
+              "genericrxow"
+            ],
+            "fileName": "dllhost.exe",
+            "fileType": "Win32 EXE",
+            "fileSize": "63.5KB",
+            "md5": "961d8e0f1ec3c196499bfcbd0a9d19fa",
+            "sha1": "88b7f13c633260a463127ce2ba6fbe38137e856a",
+            "sha256": "cd903ad2211cf7d166646d75e57fb866000f4a3b870b5ec759929be2fd81d334",
+            "asn": null,
+            "country": null,
+            "continent": null,
+            "network": null,
+            "finalUrl": null,
+            "title": null,
+            "detectedEngines": [
+              {
+                "name": "Bkav",
+                "result": "W32.AIDetectMalware.CS",
+                "category": "malicious",
+                "version": "2.0.0.1"
+              },
+              {
+                "name": "Lionic",
+                "result": "Trojan.Win32.AsyncRAT.4!c",
+                "category": "malicious",
+                "version": "8.16"
+              },
+              {
+                "name": "MicroWorld-eScan",
+                "result": "Trojan.GenericKDZ.115221",
+                "category": "malicious",
+                "version": "14.0.409.0"
+              },
+              {
+                "name": "ClamAV",
+                "result": "Win.Packed.Razy-9807129-0",
+                "category": "malicious",
+                "version": "1.5.2.0"
+              },
+              {
+                "name": "CTX",
+                "result": "exe.trojan.asyncrat",
+                "category": "malicious",
+                "version": "2024.8.29.1"
+              },
+              {
+                "name": "CAT-QuickHeal",
+                "result": "Backdoor.AsyncratFC.S22017128",
+                "category": "malicious",
+                "version": "22.00"
+              },
+              {
+                "name": "Skyhigh",
+                "result": "GenericRXOW-GX!961D8E0F1EC3",
+                "category": "malicious",
+                "version": "v2021.2.0+4045"
+              },
+              {
+                "name": "ALYac",
+                "result": "Trojan.GenericKDZ.115221",
+                "category": "malicious",
+                "version": "2.0.0.10"
+              }
+            ],
+            "votes": {
+              "harmless": 1,
+              "malicious": 3
+            }
+          }
+        },
+        "aiAnalysis": {
+          "executiveSummary": "The provided IOC is a SHA256 hash with a high detection rate on VirusTotal, indicating potential malicious activity. However, Hybrid Analysis reports no malicious activity, creating conflicting intelligence. Further analysis is required to determine the true nature of this IOC.",
+          "riskScore": 60,
+          "verdict": "malicious",
+          "threatActor": null,
+          "malwareFamily": null,
+          "attackTechniques": [],
+          "iocContext": "The IOC has been detected as malicious by 59 out of 72 vendors on VirusTotal, but Hybrid Analysis reports no malicious activity. The IOC's presence in various environments may indicate a potential threat. Additional context is needed to understand the IOC's behavior.",
+          "recommendations": [
+            "Monitor network traffic for the IOC",
+            "Analyze system logs for related activity",
+            "Perform a thorough system scan",
+            "Block the IOC at the network perimeter",
+            "Gather more intelligence on the IOC"
+          ],
+          "iocRelationships": [],
+          "confidence": "medium",
+          "tlp": "GREEN",
+          "tags": [],
+          "priorityAction": "Block the IOC at the network perimeter until further analysis can be conducted."
+        },
+        "comments": [],
+        "createdAt": "2026-03-19T11:50:30.459Z",
+        "updatedAt": "2026-03-19T11:50:30.459Z"
+      }
+    },
+    "1c8cea1cd2b355b059f92f13172c62f5": {
+      "9c1b47470c3a1eea855c26b21c4737f9": {
+        "id": "9c1b47470c3a1eea855c26b21c4737f9",
+        "userId": "1c8cea1cd2b355b059f92f13172c62f5",
+        "ioc": "45.20.23.12",
+        "iocType": "ip",
+        "results": {
+          "hybrid": {
+            "source": "Hybrid Analysis",
+            "icon": "🔬",
+            "verdict": "unknown",
+            "found": false,
+            "message": "No sandbox reports found for this IOC.",
+            "hint": "Submit the sample at hybrid-analysis.com to create a new analysis."
+          },
+          "abuseipdb": {
+            "source": "AbuseIPDB",
+            "icon": "⚠️",
+            "_demo": true,
+            "verdict": "clean",
+            "abuseScore": 2,
+            "totalReports": 3,
+            "distinctUsers": 0,
+            "lastReported": "2026-03-15",
+            "isp": "AS13335 Cloudflare",
+            "usageType": "Commercial",
+            "country": "NL",
+            "countryName": "Netherlands",
+            "isWhitelisted": false,
+            "domain": "hosting-provider.net",
+            "ipVersion": 4,
+            "categories": [],
+            "_apiError": "AbuseIPDB 521"
+          },
+          "shodan": {
+            "source": "Shodan",
+            "icon": "🌐",
+            "_demo": true,
+            "verdict": "info",
+            "ports": [
+              22,
+              80,
+              443
+            ],
+            "org": "AS16509 Amazon AWS",
+            "country": "Germany",
+            "city": "Frankfurt",
+            "os": null,
+            "vulns": [],
+            "banners": [
+              "nginx/1.24.0",
+              "OpenSSH_8.9p1"
+            ],
+            "lastUpdate": "2026-03-10",
+            "hostnames": [],
+            "tags": [],
+            "isp": "—",
+            "_apiError": "Shodan 403: Requires membership or higher to access"
+          },
+          "whois": {
+            "source": "WHOIS",
+            "icon": "📋",
+            "verdict": "info",
+            "registrar": "AT&T Enterprises, LLC",
+            "organization": "AT&T Enterprises, LLC",
+            "createdDate": "—",
+            "updatedDate": "—",
+            "expiryDate": "N/A",
+            "nameservers": [],
+            "registrant": "AT&T Enterprises, LLC",
+            "country": "US",
+            "countryName": "United States",
+            "region": "Georgia",
+            "city": "Lithonia",
+            "asn": "AS7018",
+            "timezone": "America/New_York",
+            "status": [],
+            "dnssec": "N/A",
+            "daysOld": -1,
+            "newDomain": false,
+            "emails": []
+          },
+          "virustotal": {
+            "source": "VirusTotal",
+            "icon": "🛡️",
+            "verdict": "clean",
+            "stats": {
+              "malicious": 0,
+              "suspicious": 0,
+              "harmless": 0,
+              "undetected": 94
+            },
+            "engines": 94,
+            "detections": 0,
+            "reputation": 0,
+            "firstSeen": "—",
+            "lastSeen": "2024-01-25",
+            "lastAnalysis": "1/25/2024, 10:45:08 AM UTC",
+            "timesSubmitted": 0,
+            "categories": [],
+            "tags": [],
+            "popularThreatLabel": null,
+            "popularThreatCategory": [],
+            "popularThreatName": [],
+            "fileName": null,
+            "fileType": null,
+            "fileSize": null,
+            "md5": null,
+            "sha1": null,
+            "sha256": null,
+            "asn": "AS7018 AT&T Enterprises, LLC",
+            "country": "US",
+            "continent": "NA",
+            "network": "45.20.0.0/17",
+            "finalUrl": null,
+            "title": null,
+            "detectedEngines": [],
+            "votes": {
+              "harmless": 0,
+              "malicious": 0
+            }
+          }
+        },
+        "aiAnalysis": {
+          "executiveSummary": "The provided IOC, 45.20.23.12, has been analyzed across multiple intelligence sources, with the majority indicating a clean verdict. VirusTotal reported 0/94 detections, and Hybrid Analysis showed a score of 0/100 with no malicious reports. The IOC is associated with open ports 22, 80, and 443, but no significant threats were identified.",
+          "riskScore": 0,
+          "verdict": "clean",
+          "threatActor": null,
+          "malwareFamily": null,
+          "attackTechniques": [],
+          "iocContext": "The IOC is likely associated with a legitimate server or network device, given the open ports and lack of malicious reports. The low confidence rating from AbuseIPDB and the absence of CVEs on Shodan suggest that this IOC does not pose a significant threat. Further monitoring is recommended to confirm this assessment.",
+          "recommendations": [
+            "continue monitoring",
+            "review network logs",
+            "check for potential vulnerabilities",
+            "update security protocols",
+            "schedule a follow-up analysis"
+          ],
+          "iocRelationships": [],
+          "confidence": "low",
+          "tlp": "GREEN",
+          "tags": [],
+          "priorityAction": "Continue to monitor the IOC and review network logs for any suspicious activity."
+        },
+        "comments": [],
+        "createdAt": "2026-03-19T17:53:29.551Z",
+        "updatedAt": "2026-03-19T17:53:29.551Z"
+      }
+    }
+  },
+  "sessions": {
+    "e5c76de2fddffebf776081145b4201c40b71768b902af9444cb6af6741f70a10bf9fa067bddc0a0b99be6c887e990ac6": {
+      "userId": "e4a1c9b4a9eb2a073267604cb49e0cde",
+      "createdAt": 1773920043108,
+      "expiresAt": 1774006443108
+    },
+    "176d25377ca5881af6ed535a9f92319a345d6a0d38b867ed8173b3617706b7a1c0f6e5486828c00c5a9637e58734f94d": {
+      "userId": "1c8cea1cd2b355b059f92f13172c62f5",
+      "createdAt": 1773937430470,
+      "expiresAt": 1774023830470
+    },
+    "3ed68390f6768530ace974c04374f518d6d6627c64dd879f3acd7fc01548e6d33a02bad3715940e659f8ba88952634fe": {
+      "userId": "e4a1c9b4a9eb2a073267604cb49e0cde",
+      "createdAt": 1774125791118,
+      "expiresAt": 1774212191118
+    }
+  },
+  "loginAttempts": {}
+}

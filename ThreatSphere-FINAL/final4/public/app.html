@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ThreatSphere — SOC Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+<div class="bg-layer bg-grid"></div>
+<div class="bg-layer bg-radial"></div>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <button class="sb-close" id="sbClose">✕</button>
+    <div class="sb-logo">
+      <div class="sb-logo-icon">🔮</div>
+      <div class="sb-logo-text">
+        <div class="sb-logo-name">THREAT<span>SPHERE</span></div>
+        <div class="sb-logo-sub">Detect. Investigate.</div>
+      </div>
+    </div>
+
+    <div class="sb-label">Main</div>
+    <nav class="sb-nav">
+      <div class="nav-item active" id="nav-dashboard">
+        <div class="nav-icon">◈</div><span class="nav-label">Dashboard</span>
+      </div>
+      <div class="nav-item" id="nav-toggle">
+        <div class="nav-icon">⊙</div><span class="nav-label">Collapse</span>
+      </div>
+      <div class="nav-item tool-nav" id="nav-tool-investigations">
+        <div class="nav-icon">🗂</div><span class="nav-label">Investigations</span>
+      </div>
+    </nav>
+
+    <div class="sb-label">OSINT Tools</div>
+    <nav class="sb-nav">
+      <div class="nav-item tool-nav" id="nav-tool-vt">
+        <div class="nav-icon">🛡️</div><span class="nav-label">VirusTotal</span>
+      </div>
+      <div class="nav-item tool-nav" id="nav-tool-abuse">
+        <div class="nav-icon">⚠️</div><span class="nav-label">AbuseIPDB</span>
+      </div>
+      <div class="nav-item tool-nav" id="nav-tool-shodan">
+        <div class="nav-icon">🌐</div><span class="nav-label">Shodan</span>
+      </div>
+      <div class="nav-item tool-nav" id="nav-tool-hybrid">
+        <div class="nav-icon">🔬</div><span class="nav-label">Hybrid Analysis</span>
+      </div>
+      <div class="nav-item tool-nav" id="nav-tool-urlscan">
+        <div class="nav-icon">🔎</div><span class="nav-label">URLScan.io</span>
+      </div>
+      <div class="nav-item tool-nav" id="nav-tool-whois">
+        <div class="nav-icon">📋</div><span class="nav-label">WHOIS</span>
+      </div>
+      <div class="nav-item tool-nav" id="nav-tool-mb">
+        <div class="nav-icon">🦠</div><span class="nav-label">MalwareBazaar</span>
+      </div>
+    </nav>
+
+    <div class="sb-label">Advanced Features</div>
+    <nav class="sb-nav">
+      <div class="nav-item tool-nav" id="nav-tool-feeds">
+        <div class="nav-icon">📡</div><span class="nav-label">Live Threat Feeds</span>
+      </div>
+      <div class="nav-item tool-nav" id="nav-tool-sandbox">
+        <div class="nav-icon">🧪</div><span class="nav-label">Sandbox</span>
+      </div>
+      <div class="nav-item tool-nav" id="nav-tool-graph">
+        <div class="nav-icon">🔗</div><span class="nav-label">Relationship Graph</span>
+      </div>
+      <div class="nav-item tool-nav" id="nav-tool-hasher">
+        <div class="nav-icon">🔑</div><span class="nav-label">Hash Calculator</span>
+      </div>
+      <div class="nav-item tool-nav" id="nav-tool-logs">
+        <div class="nav-icon">📄</div><span class="nav-label">Log Analyzer</span>
+      </div>
+    </nav>
+
+
+    <div class="sb-footer">
+      <div class="analyst-card">
+        <div class="analyst-avatar" id="analystAvatar">SOC</div>
+        <div class="analyst-info">
+          <div class="analyst-name" id="analystName">Analyst</div>
+          <div class="analyst-role" id="analystRole">SOC Analyst</div>
+        </div>
+        <div class="analyst-online"></div>
+      </div>
+      <button class="logout-btn" id="logoutBtn">⏻ Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+      </div>
+      <div class="topbar-search">
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input id="iocInput" class="search-input" type="text" placeholder="Enter IP, Domain, Hash (MD5/SHA256), or URL..." autocomplete="off" spellcheck="false"/>
+          <div class="ioc-type-badge" id="iocBadge">—</div>
+        </div>
+        <button class="btn-investigate" id="goBtn"><span>◎</span><span id="goBtnTxt">Investigate</span></button>
+        <button class="btn-export" id="exportBtn">⬇ Export</button>
+      </div>
+      <div class="topbar-right">
+        <div class="tb-clock" id="clock">--:--:--</div>
+        <div class="tb-alerts"><span class="alert-blink"></span><span>Live</span></div>
+      </div>
+    </header>
+
+    <!-- DASHBOARD (main investigation view) -->
+    <div id="dashboard-view" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+
+      <!-- Empty -->
+      <section id="emptyState" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:40px;">
+        <div class="empty-icon">🔮</div>
+        <h1 class="empty-title">ThreatSphere Ready</h1>
+        <p class="empty-sub">Submit an IOC for full multi-source analysis, or use the individual tool pages from the sidebar.</p>
+        <div class="example-row">
+          <span class="ex-label">Try:</span>
+          <button class="ex-btn" id="ex1">185.220.101.45</button>
+          <button class="ex-btn" id="ex2">malware-c2.ru</button>
+          <button class="ex-btn" id="ex3">44d88612fea8a8f36de82e1278abb02f</button>
+          <button class="ex-btn" id="ex4">https://phishing-example.com/login</button>
+        </div>
+      </section>
+
+      <!-- Loading -->
+      <section id="loadingPanel" style="display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:40px;">
+        <div class="radar-wrap">
+          <div class="radar-ring rr1"></div><div class="radar-ring rr2"></div><div class="radar-ring rr3"></div>
+          <div class="radar-sweep"></div><div class="radar-dot">◎</div>
+        </div>
+        <div style="text-align:center">
+          <div class="loading-stage" id="loadStage">Initializing...</div>
+          <div class="loading-sub">Querying all intelligence sources in parallel</div>
+        </div>
+        <div class="loading-sources">
+          <div class="ls-item" id="ls-vt"><div class="ls-spin"></div>VirusTotal</div>
+          <div class="ls-item" id="ls-abuse"><div class="ls-spin"></div>AbuseIPDB</div>
+          <div class="ls-item" id="ls-hybrid"><div class="ls-spin"></div>Hybrid Analysis</div>
+          <div class="ls-item" id="ls-shodan"><div class="ls-spin"></div>Shodan</div>
+          <div class="ls-item" id="ls-whois"><div class="ls-spin"></div>WHOIS</div>
+          <div class="ls-item" id="ls-ai"><div class="ls-spin"></div>AI Analysis</div>
+        <div class="ls-item" id="ls-urlscan"><div class="ls-spin"></div>URLScan</div>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section id="resultsPanel" style="display:none;flex:1;flex-direction:column;overflow:hidden;">
+        <div class="ioc-hero">
+          <div class="hero-ioc">
+            <div class="hero-type-label" id="heroType">IOC</div>
+            <div class="hero-value" id="heroVal">—</div>
+          </div>
+          <div class="hero-center">
+            <svg class="gauge-svg" viewBox="0 0 130 86" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#20d080"/><stop offset="40%" stop-color="#f0c020"/>
+                <stop offset="70%" stop-color="#f07020"/><stop offset="100%" stop-color="#f03060"/>
+              </linearGradient></defs>
+              <path d="M18 76 A47 47 0 0 1 112 76" fill="none" stroke="#0e2040" stroke-width="8" stroke-linecap="round"/>
+              <path id="gaugeFill" d="M18 76 A47 47 0 0 1 112 76" fill="none" stroke="url(#gaugeGrad)" stroke-width="8" stroke-linecap="round" stroke-dasharray="148" stroke-dashoffset="148" style="transition:stroke-dashoffset 1s ease;"/>
+              <text id="gaugeScore" x="65" y="69" text-anchor="middle" font-size="22" font-weight="900" font-family="JetBrains Mono,monospace" fill="#c8d8e8">0</text>
+              <text x="65" y="80" text-anchor="middle" font-size="7" font-family="Inter,sans-serif" fill="#3a5570" letter-spacing="2">RISK SCORE</text>
+            </svg>
+          </div>
+          <div class="hero-meta">
+            <div class="hero-meta-item"><div class="hmi-label">Verdict</div><div class="hmi-value" id="heroVerdict">—</div></div>
+            <div class="hero-meta-item"><div class="hmi-label">Confidence</div><div class="hmi-value" id="heroConf">—</div></div>
+            <div class="hero-meta-item"><div class="hmi-label">TLP</div><div class="hmi-value" id="heroTLP">—</div></div>
+          </div>
+        </div>
+        <div class="tabs-bar" id="tabsBar">
+          <button class="tab-btn active" data-tab="overview">⬡ Overview</button>
+          <button class="tab-btn" data-tab="vt">🛡️ VirusTotal</button>
+          <button class="tab-btn" data-tab="abuse">⚠️ AbuseIPDB</button>
+          <button class="tab-btn" data-tab="hybrid">🔬 Hybrid Analysis</button>
+          <button class="tab-btn" data-tab="shodan">🌐 Shodan</button>
+          <button class="tab-btn" data-tab="whois">📋 WHOIS</button>
+          <button class="tab-btn" data-tab="ai">🤖 AI Analysis</button>
+          <button class="tab-btn" data-tab="chat">💬 AI Chat</button>
+          <button class="tab-btn" data-tab="notes">✏️ Notes</button>
+        </div>
+        <div class="tab-panels">
+          <div class="tab-panel active" id="tab-overview"><div id="overviewContent"></div></div>
+          <div class="tab-panel" id="tab-vt"><div id="vtContent"></div></div>
+          <div class="tab-panel" id="tab-abuse"><div id="abuseContent"></div></div>
+          <div class="tab-panel" id="tab-hybrid"><div id="hybridContent"></div></div>
+          <div class="tab-panel" id="tab-shodan"><div id="shodanContent"></div></div>
+          <div class="tab-panel" id="tab-whois"><div id="whoisContent"></div></div>
+          <div class="tab-panel" id="tab-ai"><div id="aiContent"></div></div>
+          <div class="tab-panel" id="tab-chat">
+            <div class="chat-panel">
+              <div class="chat-messages" id="chatMsgs">
+                <div class="chat-welcome">
+                  <div class="chat-welcome-icon">🤖</div>
+                  <div class="chat-welcome-title">ThreatSphere AI Analyst — Groq / Gemini</div>
+                  <div class="chat-welcome-sub">Run an investigation first, then ask anything — firewall rules, SIEM queries, MITRE techniques, IR playbooks.</div>
+                </div>
+              </div>
+              <div class="chat-input-area">
+                <div class="chat-input-row">
+                  <textarea id="chatTA" class="chat-textarea" rows="1" placeholder="Ask about IOC, SIEM queries, firewall rules, MITRE techniques..."></textarea>
+                  <button class="chat-send-btn" id="chatSend">↑</button>
+                </div>
+                <div class="chat-hint">Free AI · Full conversation memory · Context-aware</div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-notes"><div id="commentsPanel"><div style="color:var(--t-2);font-size:13px;padding:40px;text-align:center">Run an investigation to add notes.</div></div></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ── INDIVIDUAL TOOL PAGES ───────────────────────────── -->
+
+    <!-- VirusTotal Tool Page -->
+    <div class="tool-page" id="page-tool-vt">
+      <div class="tool-header">
+        <span class="tool-header-icon">🛡️</span>
+        <div><div class="tool-header-title">VirusTotal</div><div class="tool-header-sub">Multi-engine malware scanner · IPs, domains, URLs, file hashes</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-search-bar">
+          <div class="search-wrap"><span class="search-icon">⌕</span><input id="vt-tool-input" class="search-input" type="text" placeholder="IP, domain, hash (MD5/SHA1/SHA256), or URL..." autocomplete="off" spellcheck="false"/><div class="ioc-type-badge" id="vt-tool-badge">—</div></div>
+          <button class="tool-run-btn" id="vt-tool-btn">Scan</button>
+        </div>
+        <div id="vt-tool-result"><div class="tool-empty"><div class="tool-empty-icon">🛡️</div><div class="tool-empty-title">VirusTotal Scanner</div><div class="tool-empty-sub">Enter any IP, domain, file hash, or URL to check across 70+ antivirus engines.</div></div></div>
+      </div>
+    </div>
+
+    <!-- AbuseIPDB Tool Page -->
+    <div class="tool-page" id="page-tool-abuse">
+      <div class="tool-header">
+        <span class="tool-header-icon">⚠️</span>
+        <div><div class="tool-header-title">AbuseIPDB</div><div class="tool-header-sub">IP reputation database · Abuse confidence scores · Report history</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-search-bar">
+          <div class="search-wrap"><span class="search-icon">⌕</span><input id="abuse-tool-input" class="search-input" type="text" placeholder="IPv4 address (e.g. 185.220.101.45)..." autocomplete="off"/><div class="ioc-type-badge" id="abuse-tool-badge">—</div></div>
+          <button class="tool-run-btn" id="abuse-tool-btn">Check IP</button>
+        </div>
+        <div id="abuse-tool-result"><div class="tool-empty"><div class="tool-empty-icon">⚠️</div><div class="tool-empty-title">AbuseIPDB Checker</div><div class="tool-empty-sub">Enter an IP address to check its abuse history, confidence score, and reported attack categories.</div></div></div>
+      </div>
+    </div>
+
+    <!-- Shodan Tool Page -->
+    <div class="tool-page" id="page-tool-shodan">
+      <div class="tool-header">
+        <span class="tool-header-icon">🌐</span>
+        <div><div class="tool-header-title">Shodan</div><div class="tool-header-sub">Internet-wide scanning · Open ports · Banners · CVEs</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-search-bar">
+          <div class="search-wrap"><span class="search-icon">⌕</span><input id="shodan-tool-input" class="search-input" type="text" placeholder="IP address or domain..." autocomplete="off"/><div class="ioc-type-badge" id="shodan-tool-badge">—</div></div>
+          <button class="tool-run-btn" id="shodan-tool-btn">Lookup</button>
+        </div>
+        <div id="shodan-tool-result"><div class="tool-empty"><div class="tool-empty-icon">🌐</div><div class="tool-empty-title">Shodan Host Lookup</div><div class="tool-empty-sub">Enter an IP or domain to view open ports, running services, OS, and known vulnerabilities.</div></div></div>
+      </div>
+    </div>
+
+    <!-- Hybrid Analysis Tool Page -->
+    <div class="tool-page" id="page-tool-hybrid">
+      <div class="tool-header">
+        <span class="tool-header-icon">🔬</span>
+        <div><div class="tool-header-title">Hybrid Analysis</div><div class="tool-header-sub">Malware sandbox · Behavioral analysis · Free public platform</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-search-bar">
+          <div class="search-wrap"><span class="search-icon">⌕</span><input id="hybrid-tool-input" class="search-input" type="text" placeholder="File hash (MD5/SHA256), domain, IP, or URL..." autocomplete="off"/><div class="ioc-type-badge" id="hybrid-tool-badge">—</div></div>
+          <button class="tool-run-btn" id="hybrid-tool-btn">Analyze</button>
+        </div>
+        <div id="hybrid-tool-result"><div class="tool-empty"><div class="tool-empty-icon">🔬</div><div class="tool-empty-title">Hybrid Analysis Sandbox</div><div class="tool-empty-sub">Search for existing malware sandbox reports. Supports file hashes, domains, IPs, and URLs.</div></div></div>
+      </div>
+    </div>
+
+    <!-- URLScan Tool Page -->
+    <div class="tool-page" id="page-tool-urlscan">
+      <div class="tool-header">
+        <span class="tool-header-icon">🔎</span>
+        <div><div class="tool-header-title">URLScan.io</div><div class="tool-header-sub">URL sandbox · Screenshot · DOM analysis · Phishing detection</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-search-bar">
+          <div class="search-wrap"><span class="search-icon">⌕</span><input id="urlscan-tool-input" class="search-input" type="text" placeholder="URL (https://...), domain, or IP address..." autocomplete="off"/><div class="ioc-type-badge" id="urlscan-tool-badge">—</div></div>
+          <button class="tool-run-btn" id="urlscan-tool-btn">Scan</button>
+        </div>
+        <div id="urlscan-tool-result"><div class="tool-empty"><div class="tool-empty-icon">🔎</div><div class="tool-empty-title">URLScan.io</div><div class="tool-empty-sub">Submit a URL for sandbox analysis, or search existing scans for domains and IPs. Get screenshots, page content, and phishing verdicts.</div></div></div>
+      </div>
+    </div>
+
+    <!-- WHOIS Tool Page -->
+    <div class="tool-page" id="page-tool-whois">
+      <div class="tool-header">
+        <span class="tool-header-icon">📋</span>
+        <div><div class="tool-header-title">WHOIS / RDAP</div><div class="tool-header-sub">Domain registration · IP geolocation · ASN · Nameservers</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-search-bar">
+          <div class="search-wrap"><span class="search-icon">⌕</span><input id="whois-tool-input" class="search-input" type="text" placeholder="Domain or IP address..." autocomplete="off"/><div class="ioc-type-badge" id="whois-tool-badge">—</div></div>
+          <button class="tool-run-btn" id="whois-tool-btn">Lookup</button>
+        </div>
+        <div id="whois-tool-result"><div class="tool-empty"><div class="tool-empty-icon">📋</div><div class="tool-empty-title">WHOIS / RDAP Lookup</div><div class="tool-empty-sub">Enter a domain or IP to retrieve registration data, nameservers, geolocation, ASN, and DNSSEC status.</div></div></div>
+      </div>
+    </div>
+
+  
+    <!-- ── LIVE THREAT FEEDS PAGE ─────────────────────────────── -->
+    <div class="tool-page" id="page-tool-feeds">
+      <div class="tool-header">
+        <span class="tool-header-icon">📡</span>
+        <div>
+          <div class="tool-header-title">Live Threat Feeds</div>
+          <div class="tool-header-sub">AlienVault OTX · Abuse.ch URLhaus · Feodo Tracker · ThreatFox — real-time malicious IPs, domains, URLs, hashes</div>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center;">
+          <button class="tool-run-btn" id="feeds-refresh-btn" style="min-width:140px;">⟳ Refresh Feeds</button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;" id="feeds-filter-btns">
+            <button class="feed-filter active" data-filter="all">All</button>
+            <button class="feed-filter" data-filter="ips">IPs</button>
+            <button class="feed-filter" data-filter="domains">Domains</button>
+            <button class="feed-filter" data-filter="urls">URLs</button>
+            <button class="feed-filter" data-filter="hashes">Hashes</button>
+          </div>
+          <div style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--t-2);" id="feeds-updated">Not loaded</div>
+        </div>
+        <div id="feeds-stats" style="display:none;margin-bottom:14px;"></div>
+        <div id="feeds-result">
+          <div class="tool-empty">
+            <div class="tool-empty-icon">📡</div>
+            <div class="tool-empty-title">Live Threat Intelligence Feeds</div>
+            <div class="tool-empty-sub">Click Refresh to pull the latest malicious indicators from AlienVault OTX, Abuse.ch URLhaus, Feodo Tracker (botnet C2s), and ThreatFox.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SANDBOX PAGE ───────────────────────────────────────── -->
+    <div class="tool-page" id="page-tool-sandbox">
+      <div class="tool-header">
+        <span class="tool-header-icon">🧪</span>
+        <div>
+          <div class="tool-header-title">File Sandbox</div>
+          <div class="tool-header-sub">Upload a file for behavioral analysis — processes, network calls, registry changes, dropped files, MITRE TTPs</div>
+        </div>
+        <span class="tool-header-badge tool-badge-free">Free Analysis</span>
+      </div>
+      <div class="tool-body">
+        <div class="tool-api-note">ℹ️ With <strong>HYBRID_KEY</strong> in server/index.js: real Hybrid Analysis lookup by hash. Without key: deterministic simulation based on file metadata.</div>
+        <div id="sandbox-upload-area">
+          <div class="sandbox-dropzone" id="sandboxDropzone">
+            <div class="sandbox-drop-icon">📁</div>
+            <div class="sandbox-drop-title">Drop file here or click to browse</div>
+            <div class="sandbox-drop-sub">PE32, Office documents, scripts, PDFs, archives · Max 50MB</div>
+            <input type="file" id="sandboxFileInput" style="display:none"/>
+          </div>
+          <div id="sandboxFileInfo" style="display:none;margin-top:12px;"></div>
+          <button class="tool-run-btn" id="sandbox-run-btn" style="margin-top:14px;width:100%;display:none;">🔬 Analyze File</button>
+        </div>
+        <div id="sandbox-result">
+          <div class="tool-empty" style="padding:30px 20px;">
+            <div class="tool-empty-icon">🧪</div>
+            <div class="tool-empty-title">File Behavioral Analysis</div>
+            <div class="tool-empty-sub">Upload a file to see its behavior — what processes it spawns, what network connections it makes, what registry keys it creates, and what malware family it belongs to.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RELATIONSHIP GRAPH PAGE ────────────────────────────── -->
+    <div class="tool-page" id="page-tool-graph">
+      <div class="tool-header">
+        <span class="tool-header-icon">🔗</span>
+        <div>
+          <div class="tool-header-title">Relationship Graph</div>
+          <div class="tool-header-sub">Visual pivot — discover related IPs, domains, URLs, and malware connected to any IOC</div>
+        </div>
+        <span class="tool-header-badge tool-badge-key">VT Key Recommended</span>
+      </div>
+      <div class="tool-body" style="padding-bottom:0;display:flex;flex-direction:column;height:100%;">
+        <div class="tool-api-note" style="margin-bottom:14px;">ℹ️ With <strong>VT_KEY</strong>: real infrastructure pivot via VirusTotal Graph API. Without key: deterministic demo graph showing typical C2 relationships.</div>
+        <div class="tool-search-bar" style="margin-bottom:14px;">
+          <div class="search-wrap">
+            <span class="search-icon">⌕</span>
+            <input id="graph-tool-input" class="search-input" type="text" placeholder="IP, domain, or hash to pivot on..." autocomplete="off"/>
+            <div class="ioc-type-badge" id="graph-tool-badge">—</div>
+          </div>
+          <button class="tool-run-btn" id="graph-tool-btn">Build Graph</button>
+        </div>
+        <div id="graph-legend" style="display:none;margin-bottom:10px;"></div>
+        <div id="graph-container" style="flex:1;min-height:480px;position:relative;background:var(--bg-1);border:1px solid var(--b-1);border-radius:12px;overflow:hidden;">
+          <div id="graph-empty" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--t-2);">
+            <div style="font-size:48px;opacity:.3">🔗</div>
+            <div style="font-family:var(--display);font-size:17px;">Relationship Graph</div>
+            <div style="font-size:12px;color:var(--t-3);max-width:340px;text-align:center;">Enter an IP, domain, or file hash to build a visual graph of related infrastructure, C2 servers, and malware samples.</div>
+          </div>
+          <svg id="graph-svg" width="100%" height="100%" style="display:none;"></svg>
+        </div>
+        <div id="graph-node-detail" style="display:none;margin-top:10px;"></div>
+      </div>
+    </div>
+
+
+    <!-- ── HASH CALCULATOR PAGE ───────────────────────────────── -->
+    <div class="tool-page" id="page-tool-hasher">
+      <div class="tool-header">
+        <span class="tool-header-icon">🔑</span>
+        <div>
+          <div class="tool-header-title">Hash Calculator</div>
+          <div class="tool-header-sub">Compute MD5, SHA-1, SHA-256 and SHA-512 — 100% client-side, file never leaves your browser</div>
+        </div>
+        <span class="tool-header-badge tool-badge-free">Client-Side · Private</span>
+      </div>
+      <div class="tool-body">
+        <!-- Drop zone -->
+        <div class="sandbox-dropzone" id="hasherDropzone" style="margin-bottom:16px;">
+          <div class="sandbox-drop-icon">🔑</div>
+          <div class="sandbox-drop-title">Drop any file to calculate its hashes</div>
+          <div class="sandbox-drop-sub">Or click to browse · File never leaves your device · No size limit</div>
+          <input type="file" id="hasherFileInput" style="display:none"/>
+        </div>
+
+        <!-- Text input tab -->
+        <div style="margin-bottom:16px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--t-2);margin-bottom:8px;">Or hash a text string</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input id="hasherTextInput" class="search-input" type="text"
+              placeholder="Enter text to hash..."
+              style="flex:1;min-width:200px;padding:10px 14px;"/>
+            <button class="tool-run-btn" id="hasherTextBtn">Hash Text</button>
+          </div>
+        </div>
+
+        <!-- Progress bar (shown while computing large files) -->
+        <div id="hasherProgress" style="display:none;margin-bottom:14px;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);margin-bottom:6px;" id="hasherProgressLabel">Computing hashes...</div>
+          <div style="height:4px;background:var(--bg-4);border-radius:2px;overflow:hidden;">
+            <div id="hasherProgressBar" style="height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));width:0%;transition:width .2s;border-radius:2px;"></div>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div id="hasher-result">
+          <div class="tool-empty">
+            <div class="tool-empty-icon">🔑</div>
+            <div class="tool-empty-title">Hash Calculator</div>
+            <div class="tool-empty-sub">Drop a file or enter text above to compute MD5, SHA-1, SHA-256, and SHA-512 hashes. Everything runs in your browser — nothing is uploaded to any server.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ── LOG ANALYZER PAGE ──────────────────────────────────── -->
+    <div class="tool-page" id="page-tool-logs">
+      <div class="tool-header">
+        <span class="tool-header-icon">📄</span>
+        <div>
+          <div class="tool-header-title">Log Analyzer</div>
+          <div class="tool-header-sub">Upload a log file · Extract IOCs · Correlate events · Get actionable decisions</div>
+        </div>
+        <span class="tool-header-badge tool-badge-free">Server-Side · Private</span>
+      </div>
+      <div class="tool-body" id="logToolBody">
+        <div class="log-upload-zone" id="logDropzone">
+          <div class="log-drop-icon">📄</div>
+          <div class="log-drop-title">Drop a log file here or click to browse</div>
+          <div class="log-drop-sub">Apache · Nginx · Syslog · Windows Event · Firewall · Suricata/Snort · Any plain-text log</div>
+          <div class="log-drop-sub" style="margin-top:4px;color:var(--t-3)">Max 2MB · File is processed server-side · Results stay in your session</div>
+          <input type="file" id="logFileInput" style="display:none" accept=".log,.txt,.csv,.json,.xml,.evtx,.out,.gz"/>
+        </div>
+        <div class="log-format-pills" style="margin:12px 0;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+          <span style="font-size:10px;color:var(--t-2);">Supported formats:</span>
+          <span class="log-format-pill">Apache / Nginx</span>
+          <span class="log-format-pill">Syslog / Auth.log</span>
+          <span class="log-format-pill">Windows Event</span>
+          <span class="log-format-pill">Firewall (Fortigate, PAN)</span>
+          <span class="log-format-pill">IDS / Snort / Suricata</span>
+          <span class="log-format-pill">Generic text</span>
+        </div>
+        <div id="log-result">
+          <div class="tool-empty">
+            <div class="tool-empty-icon">📄</div>
+            <div class="tool-empty-title">Upload a Log File</div>
+            <div class="tool-empty-sub">The analyzer will extract all IOCs (IPs, domains, hashes, URLs), correlate events, detect attack patterns, and give you a prioritized action plan.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ALL INVESTIGATIONS PAGE ────────────────────────────── -->
+    <div class="tool-page" id="page-tool-investigations">
+      <div class="tool-header">
+        <span class="tool-header-icon">🗂</span>
+        <div>
+          <div class="tool-header-title">All Investigations</div>
+          <div class="tool-header-sub">Full investigation history with search and filter</div>
+        </div>
+        <button class="tool-header-badge tool-badge-free" id="invPageBackBtn" style="cursor:pointer;margin-left:auto;">← Back</button>
+      </div>
+      <div class="tool-body">
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+          <input id="invSearchInput" class="search-input" type="text" placeholder="Search IOC, verdict, type..." style="flex:1;min-width:180px;padding:9px 14px;font-size:12px;"/>
+          <select id="invFilterVerdict" style="background:var(--bg-3);border:1px solid var(--b-1);border-radius:8px;color:var(--t-1);padding:9px 12px;font-size:12px;outline:none;cursor:pointer;">
+            <option value="">All verdicts</option>
+            <option value="malicious">Malicious</option>
+            <option value="suspicious">Suspicious</option>
+            <option value="clean">Clean</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+        <div id="histList" style="display:none"></div><div id="allInvsList"></div>
+      </div>
+    </div>
+
+
+    <!-- ── MALWAREBAZAAR PAGE ─────────────────────────────────── -->
+    <div class="tool-page" id="page-tool-mb">
+      <div class="tool-header">
+        <span class="tool-header-icon">🦠</span>
+        <div>
+          <div class="tool-header-title">MalwareBazaar</div>
+          <div class="tool-header-sub">Search malware samples by hash, signature, or tag · Abuse.ch free intelligence</div>
+        </div>
+      </div>
+      <div class="tool-body">
+        <!-- Search bar -->
+        <div class="mb-search-bar">
+          <select id="mbQueryType" class="mb-type-select">
+            <option value="recent">Recent Samples</option>
+            <option value="hash">Search by Hash</option>
+            <option value="signature">Search by Signature</option>
+            <option value="tag">Search by Tag</option>
+          </select>
+          <div class="search-wrap" id="mbInputWrap">
+            <span class="search-icon">⌕</span>
+            <input id="mbInput" class="search-input" type="text" placeholder="Enter SHA256, MD5, signature or tag..." autocomplete="off"/>
+          </div>
+          <button class="tool-run-btn" id="mbRunBtn">Search</button>
+        </div>
+        <!-- Quick tags -->
+        <div class="mb-quick-tags">
+          <span style="font-size:10px;color:var(--t-2);">Quick:</span>
+          <button class="mb-qtag" data-type="signature" data-val="Emotet">Emotet</button>
+          <button class="mb-qtag" data-type="signature" data-val="AgentTesla">AgentTesla</button>
+          <button class="mb-qtag" data-type="signature" data-val="QakBot">QakBot</button>
+          <button class="mb-qtag" data-type="signature" data-val="AsyncRAT">AsyncRAT</button>
+          <button class="mb-qtag" data-type="signature" data-val="RedLine">RedLine</button>
+          <button class="mb-qtag" data-type="tag" data-val="exe">exe</button>
+          <button class="mb-qtag" data-type="tag" data-val="doc">doc</button>
+          <button class="mb-qtag" data-type="tag" data-val="powershell">powershell</button>
+        </div>
+        <!-- Results -->
+        <div id="mb-result">
+          <div class="tool-empty">
+            <div class="tool-empty-icon">🦠</div>
+            <div class="tool-empty-title">MalwareBazaar Search</div>
+            <div class="tool-empty-sub">Search for malware samples by hash (MD5/SHA256), malware signature/family name, or file tags. Powered by Abuse.ch — 100% free, no API key needed.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<script src="/js/app.js"></script>
+</body>
+</html>
